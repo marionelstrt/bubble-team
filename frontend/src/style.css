@@ -40,6 +40,7 @@ html, body {
 }
 
 body {
+  overflow: hidden;
   background: var(--background);
   justify-content: center;
   align-items: center;

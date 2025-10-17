@@ -2,23 +2,30 @@
     defineProps({
         label: String,
         placeholder: String,
+        type: {
+            type: String,
+            default: "text",
+        },
     });
 </script>
 
 <template>
-    <div class="form-field">
+    <div class="input-field">
         <label for="input">{{ label }}</label>
-        <input name="input" type="text" :placeholder="placeholder" />
+        <input name="input" :type="type" :placeholder="placeholder" />
     </div>
 </template>
 
 <style scoped>
-.form-field {
+.input-field {
     gap: 1em;
     transition: all 0.1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    display: flex;
 }
 
-.form-field:active {
+.input-field:active {
     transform: scale(0.9);
 }
 
