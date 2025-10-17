@@ -44,6 +44,7 @@ button {
 }
 
 .button {
+    display: block;
     transition: all 0.1s ease-in-out;
     box-shadow: 0px 2px 10px 1px #00000030;
     border: 5px solid var(--button-border);

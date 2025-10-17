@@ -11,25 +11,31 @@
   --periwinkle: #d0d1ffff;
   --columbia-blue: #c8e7ffff;
   --celeste: #c0fdffff;
+  --title: linear-gradient(to right, #d144d1ff, rgb(199, 145, 243)); 
 
   --background: linear-gradient(75deg, var(--mauve-2), var(--mauve));
   --button-background: var(--mauve-5);
   --button-border: var(--mauve-6);
   --button-border-radius: 30px;
 
+  --input-border: var(--periwinkle);
+  --input-outline: var(--mauve-5);
+  --input-text-color: rgba(0, 0, 0, 0.8);
+  --input-border-radius: 50px;
+
   --font-small: 1rem;
   --font-medium: 2.5rem;
   --font-big: 3rem;
+  --font-huge: 5rem;
 }
 
 html, body {
   margin: 0;
   width: 100%;
   height: 100%;
-
 }
 
-p {
+* {
   font-family: "Sour Gummy", sans-serif;
 }
 
