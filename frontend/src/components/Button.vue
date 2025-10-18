@@ -1,4 +1,6 @@
 <script setup>
+import { HeartIcon } from "@heroicons/vue/24/solid";
+
 defineProps({
   rows: Number,
   cols: Number,
@@ -12,7 +14,17 @@ defineProps({
       <template v-for="n in rows" :key="n">
         <div class="bubble-row" :data-n="n">
           <template v-for="m in cols" :key="m">
-            <div class="bubble"></div>
+            <div class="bubble">
+              <template v-if="Math.random() > 0.5">
+                <div class="is-heart">
+                  <HeartIcon />
+                </div>
+              </template>
+              <template v-else>
+                <div class="is-bubble">
+                </div>
+              </template>
+            </div>
           </template>
         </div>
       </template>
@@ -105,12 +117,21 @@ button {
 }
 
 .bubble {
-  --bubble-size: 16px;
   --bubble-color: rgba(88, 50, 50, 0.103);
+}
 
+.is-bubble {
+  --bubble-size: 12px;
   border-radius: 50%;
   width: var(--bubble-size);
   height: var(--bubble-size);
   background-color: var(--bubble-color);
+}
+
+.is-heart {
+  --bubble-size: 16px;
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  color: var(--bubble-color);
 }
 </style>

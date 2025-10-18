@@ -21,6 +21,12 @@ main {
   align-items: center;
   flex-direction: column;
   gap: 3em;
+
+  padding: 40px;
+  border-radius: 10%;
+  overflow: hidden;
+  border: 5px dashed var(--mauve-5);
+  background-color: var(--mauve-2);
 }
 
 .title {
