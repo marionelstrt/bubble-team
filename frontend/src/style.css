@@ -22,13 +22,11 @@
   --input-outline: var(--mauve-5);
   --input-text-color: rgba(0, 0, 0, 0.8);
   --input-border-radius: 50px;
-  --input-width: 100%; 
 
   --font-small: 1.5rem;
   --font-medium: 2.5rem;
   --font-big: 3rem;
   --font-huge: 5rem;
-
 }
 
 html,

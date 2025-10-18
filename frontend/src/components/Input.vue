@@ -40,7 +40,6 @@ input {
   color: var(--input-text-color);
   padding: 20px;
   font-weight: 400;
-  width : var(--input-width); 
 }
 
 input:focus {

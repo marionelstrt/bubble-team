@@ -1,6 +1,10 @@
 <script setup>
 import Input from "./Input.vue";
 import Button from "./Button.vue";
+import MonsterBoba from "../assets/monster.svg";
+import TaroBoba from "../assets/boba.svg";
+import BrownSugarBoba from "../assets/sugar.svg";
+import MatchaBoba from "../assets/matcha.svg";
 import { ChevronRightIcon } from "@heroicons/vue/24/solid";
 import { useRoute, useRouter } from "vue-router";
 import { ref, watch } from "vue";
@@ -22,10 +26,10 @@ watch(route, newRoute => {
 });
 
 const bobas = [
-  { name: "monster", desc: "soirée énergétique" },
-  { name: "matcha", desc: "selon la vibe" },
-  { name: "taro", desc: "claquage régulier" },
-  { name: "sugar", desc: "mariage" },
+  { name: "monster", desc: "soirée énergétique", icon: MonsterBoba },
+  { name: "matcha", desc: "selon la vibe", icon: MatchaBoba },
+  { name: "taro", desc: "claquage régulier", icon: TaroBoba },
+  { name: "sugar", desc: "mariage", icon: BrownSugarBoba },
 ];
 const selected = ref(null); 
 
@@ -64,7 +68,7 @@ function next() {
         <div class="image-grid">
           <template v-for="boba in bobas">
             <div @click="handleBobaClick(boba.name)" :class="['boba-tile', selected == boba.name ? 'boba-tile-selected' : null]">
-              <img src="/boba.svg" alt="Boba 4" />
+              <img :src="boba.icon" :alt="'Boba '+boba.name" />
               <p class="boba-label">{{boba.name}}</p>
               <p class="boba-desc">{{boba.desc}}</p>
             </div>
