@@ -1,6 +1,6 @@
 <script setup>
-import Title from "./Title.vue"
-import Form from "./Form.vue"
+import Title from "../components/Title.vue"
+import Form from "../components/Form.vue"
 import icon from "../assets/boba.svg"
 </script>
 
