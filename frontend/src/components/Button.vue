@@ -71,28 +71,21 @@ button {
     position: absolute;
     display: flex;
     gap: 5px;
-    --rotate: rotate(-20deg);
 
+    --rotate: rotate(-20deg);
     --bubble-x-sep: 10px;
     --bubble-y-sep: 20px;
     --bubble-y-margin: 70px;
+
+    transform:
+        var(--rotate)
+        translateX(calc(var(--bubble-x-sep) * var(--n)))
+        translateY(calc(var(--bubble-y-margin) + var(--bubble-y-sep) * var(--n)));
 }
 
-.bubble-row[data-n="1"] {
-    transform: var(--rotate) translateY(var(--bubble-y-margin));
-}
-.bubble-row[data-n="2"] {
-    transform:
-        var(--rotate)
-        translateX(calc(var(--bubble-x-sep) * 1))
-        translateY(calc(var(--bubble-y-margin) + var(--bubble-y-sep) * 1));
-}
-.bubble-row[data-n="3"] {
-    transform:
-        var(--rotate)
-        translateX(calc(var(--bubble-x-sep) * 2))
-        translateY(calc(var(--bubble-y-margin) + var(--bubble-y-sep) * 2));
-}
+.bubble-row[data-n="1"] { --n: 0; }
+.bubble-row[data-n="2"] { --n: 1; }
+.bubble-row[data-n="3"] { --n: 2; }
 
 .bubble {
     --bubble-size: 16px;
