@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap");
 
 :root {
   --pink-lavender: #ffcbf2ff;
@@ -11,7 +11,7 @@
   --periwinkle: #d0d1ffff;
   --columbia-blue: #c8e7ffff;
   --celeste: #c0fdffff;
-  --title: linear-gradient(to right, #d144d1ff, rgb(199, 145, 243)); 
+  --title: linear-gradient(to right, #d144d1ff, rgb(199, 145, 243));
 
   --background: linear-gradient(75deg, var(--mauve-2), var(--mauve));
   --button-background: var(--mauve-5);
@@ -29,7 +29,8 @@
   --font-huge: 5rem;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   width: 100%;
   height: 100%;

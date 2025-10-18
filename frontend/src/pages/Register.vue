@@ -1,7 +1,7 @@
 <script setup>
-import Title from "../components/Title.vue"
-import Form from "../components/Form.vue"
-import icon from "../assets/boba.svg"
+import Title from "../components/Title.vue";
+import Form from "../components/Form.vue";
+import icon from "../assets/boba.svg";
 </script>
 
 <template>

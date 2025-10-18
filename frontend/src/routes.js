@@ -1,7 +1,5 @@
-import Register from './pages/Register.vue';
+import Register from "./pages/Register.vue";
 
-const routes = [
-  { path: '/', component: Register },
-];
+const routes = [{ path: "/", component: Register }];
 
 export default routes;
