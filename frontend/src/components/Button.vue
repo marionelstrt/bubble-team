@@ -5,11 +5,12 @@ defineProps({
   rows: Number,
   cols: Number,
   width: String,
+  disabled: Boolean,
 });
 </script>
 
 <template>
-  <div class="button" :style="{ width: width }">
+  <div :class="['button', disabled ? 'button-disabled' : null]" :style="{ width: width }">
     <div class="bubbles">
       <template v-for="n in rows" :key="n">
         <div class="bubble-row" :data-n="n">
@@ -29,7 +30,7 @@ defineProps({
         </div>
       </template>
     </div>
-    <button>
+    <button :disabled="disabled">
       <p class="button-label">
         <slot></slot>
       </p>
@@ -72,11 +73,16 @@ button {
   transform: scale(1);
 }
 
-.button:hover {
+.button-disabled {
+  border: 5px solid rgb(142 122 149 / 67%);
+  filter: brightness(0.5);
+}
+
+.button:hover:not(.button-disabled) {
   transform: scale(1.1);
 }
 
-.button:active {
+.button:active:not(.button-disabled) {
   transform: scale(0.9);
 }
 

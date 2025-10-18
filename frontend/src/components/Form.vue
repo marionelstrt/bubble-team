@@ -11,16 +11,31 @@ const states = {
   password: "password",
   email: "email",
 };
+const defaultState = states.bubble;
 
 const route = useRoute();
 const router = useRouter();
-const state = ref(route.query.state || states.name);
+const state = ref(route.query.state || defaultState);
 
 watch(route, newRoute => {
-  state.value = newRoute.query.state || states.bubble;
+  state.value = newRoute.query.state || defaultState;
 });
 
+const bobas = [
+  { name: "monster", desc: "soirée énergétique" },
+  { name: "matcha", desc: "selon la vibe" },
+  { name: "taro", desc: "claquage régulier" },
+  { name: "sugar", desc: "mariage" },
+];
+const selected = ref(null); 
+
+function handleBobaClick(boba) {
+  selected.value = boba;
+}
+
 function next() {
+  if (selected.value == null) return;
+
   switch (state.value) {
     case states.bubble:
       state.value = states.name; 
@@ -40,14 +55,6 @@ function next() {
     query: { state: state.value },
   });
 }
-
-function handleBobaClick(target)
-{
-  state.value = states.name;
-  router.push({
-    query: { state: states.name, flavor: target},
-  });
-}
 </script>
 
 <template>
@@ -55,10 +62,13 @@ function handleBobaClick(target)
     <template v-if="state == states.bubble">
       <div class="form-fields"> 
         <div class="image-grid">
-            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('monster')" />
-            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('taro')" />
-            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('mango')" />
-            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('yay')" />
+          <template v-for="boba in bobas">
+            <div @click="handleBobaClick(boba.name)" :class="['boba-tile', selected == boba.name ? 'boba-tile-selected' : null]">
+              <img src="/boba.svg" alt="Boba 4" />
+              <p class="boba-label">{{boba.name}}</p>
+              <p class="boba-desc">{{boba.desc}}</p>
+            </div>
+          </template>
         </div>
       </div>
     </template>
@@ -92,7 +102,7 @@ function handleBobaClick(target)
       </div>
     </template>
   </transition>
-  <Button :rows="3" :cols="12" width="200px" @click="next">
+  <Button :rows="3" :cols="12" width="200px" :disabled="state == states.bubble && selected == null" @click="next">
     Next
     <template #icon>
       <ChevronRightIcon />
@@ -111,13 +121,78 @@ function handleBobaClick(target)
 
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-template-rows: repeat(2, 1fr); 
-  gap: 30px; 
-  width: 200px; 
-  height: 200px;
-  margin: 0 auto; 
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 30px;
+  width: 100%;
+  height: 100%;
 }
+
+.boba-tile {
+  background-color: var(--pink-lavender);
+  border-radius: 15%;
+  height: 180px;
+  aspect-ratio: 1/1;
+  display: flex;
+  transition: border-color 0.2s ease-in, transform 0.1s ease-in-out;
+  border: 3px solid transparent;
+  user-select: none;
+}
+
+.boba-tile:hover {
+  transform: scale(1.1);
+}
+
+.boba-tile:active {
+  transform: scale(0.9);
+}
+
+.boba-tile-selected {
+  border: 3px solid white;
+}
+
+.boba-tile-selected:after {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: var(--mauve-5);
+  content: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke-width%3D%221.5%22%20stroke%3D%22white%22%20class%3D%22size-6%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m4.5%2012.75%206%206%209-13.5%22%20%2F%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m4.5%2012.75%206%206%209-13.5%22%20%2F%3E%3C%2Fsvg%3E");
+  border-radius: 50%;
+  margin: 10px;
+  padding: 4px;
+}
+
+.boba-tile img {
+  width: 40%;
+  margin: auto;
+}
+
+.boba-tile {
+  position: relative;
+}
+
+.boba-label {
+  position: absolute;
+  justify-self: anchor-center;
+  align-self: flex-start;
+  background: var(--title);
+  background-clip: text;
+  color: transparent;
+  font-weight: 500;
+  font-size: var(--font-small);
+  margin: 7px;
+}
+
+.boba-desc {
+  position: absolute;
+  justify-self: anchor-center;
+  align-self: flex-end;
+  color: #00000080;
+  font-weight: 400;
+  font-size: var(--font-very-small);
+  margin: 5px;
+}
+
 .info {
   text-wrap: wrap;
   color: white;
