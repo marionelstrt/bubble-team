@@ -1,6 +1,7 @@
 <script setup>
 import Input from "./Input.vue";
 import Button from "./Button.vue";
+import { ChevronRightIcon } from "@heroicons/vue/24/solid";
 import { useRoute, useRouter } from "vue-router";
 import { ref, watch } from "vue";
 
@@ -68,7 +69,12 @@ function next() {
       </div>
     </template>
   </transition>
-  <Button :rows="3" :cols="12" width="200px" @click="next">Next</Button>
+  <Button :rows="3" :cols="12" width="200px" @click="next">
+    Next
+    <template #icon>
+      <ChevronRightIcon />
+    </template>
+  </Button>
 </template>
 
 <style>

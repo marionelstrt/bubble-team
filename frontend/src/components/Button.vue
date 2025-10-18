@@ -21,6 +21,9 @@ defineProps({
       <p class="button-label">
         <slot></slot>
       </p>
+      <div class="button-icon">
+        <slot name="icon"></slot>
+      </div>
     </button>
   </div>
 </template>
@@ -37,6 +40,7 @@ button {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 
@@ -65,8 +69,15 @@ button {
 }
 
 .button-label {
-  position: fixed;
   z-index: 999;
+  flex-basis: 70%;
+}
+
+.button-icon {
+  width: 40px;
+  height: 40px;
+  flex-basis: 20%;
+  margin-top: -6px;
 }
 
 .bubble-row {
