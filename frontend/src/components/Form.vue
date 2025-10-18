@@ -6,6 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ref, watch } from "vue";
 
 const states = {
+  bubble: "bubble", 
   name: "name",
   password: "password",
   email: "email",
@@ -16,11 +17,14 @@ const router = useRouter();
 const state = ref(route.query.state || states.name);
 
 watch(route, newRoute => {
-  state.value = newRoute.query.state || states.name;
+  state.value = newRoute.query.state || states.bubble;
 });
 
 function next() {
   switch (state.value) {
+    case states.bubble:
+      state.value = states.name; 
+      break;
     case states.name:
       state.value = states.password;
       break;
@@ -28,7 +32,7 @@ function next() {
       state.value = states.email;
       break;
     case states.email:
-      state.value = states.name;
+      state.value = states.bubble;
       break;
   }
 
@@ -36,11 +40,30 @@ function next() {
     query: { state: state.value },
   });
 }
+
+function handleBobaClick(target)
+{
+  state.value = states.name;
+  router.push({
+    query: { state: states.name, flavor: target},
+  });
+}
 </script>
 
 <template>
   <transition name="fade" mode="out-in">
-    <template v-if="state == states.name">
+    <template v-if="state == states.bubble">
+      <div class="form-fields"> 
+        <div class="image-grid">
+            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('monster')" />
+            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('taro')" />
+            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('mango')" />
+            <img src="/boba.svg" alt="Boba 4" @click="handleBobaClick('yay')" />
+        </div>
+      </div>
+    </template>
+  
+    <template v-else-if="state == states.name">
       <div class="form-fields">
         <Input label="Your name" placeholder="Your first name..." />
         <Input label="Your last name" placeholder="Your last name..." />
@@ -86,6 +109,15 @@ function next() {
   gap: 1em;
 }
 
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: repeat(2, 1fr); 
+  gap: 30px; 
+  width: 200px; 
+  height: 200px;
+  margin: 0 auto; 
+}
 .info {
   text-wrap: wrap;
   color: white;
