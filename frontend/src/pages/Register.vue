@@ -20,6 +20,7 @@ main {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 60vw;
   gap: 3em;
 
   padding: 40px;

@@ -49,18 +49,18 @@ function next() {
 
     <template v-else-if="state == states.password">
       <div class="form-fields">
-        <p>Choose a good password UwU</p>
+        <p class="info">In order to easily recover your account in case of loss and to prevent spam, we need to your email address. An email will be sent to it to verify its authenticity.</p>
         <Input
           type="password"
-          label="Your email"
-          placeholder="Your secure email..."
+          label="Your email address"
+          placeholder="Your email address..."
         />
       </div>
     </template>
 
     <template v-else-if="state == states.email">
       <div class="form-fields">
-        <p>Please give us your email</p>
+        <p class="info">Please choose a password for your account. You may also register a passkey instead. Common passwords are insecure and thus not allowed.</p>
         <Input
           type="password"
           label="Your password"
@@ -84,6 +84,14 @@ function next() {
   justify-content: center;
   height: 400px;
   gap: 1em;
+}
+
+.info {
+  text-wrap: wrap;
+  color: white;
+  max-width: 100%;
+  align-self: center;
+  font-size: var(--font-small);
 }
 
 .fade-enter-active,
