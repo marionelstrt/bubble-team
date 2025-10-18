@@ -86,22 +86,22 @@ function next() {
 
     <template v-else-if="state == states.password">
       <div class="form-fields">
-        <p class="info">In order to easily recover your account in case of loss and to prevent spam, we need to your email address. An email will be sent to it to verify its authenticity.</p>
+        <p class="info">Please choose a password for your account. You may also register a passkey instead. Common passwords are insecure and thus not allowed.</p>
         <Input
           type="password"
-          label="Your email address"
-          placeholder="Your email address..."
+          label="Your password"
+          placeholder="Your secure password..."
         />
       </div>
     </template>
 
     <template v-else-if="state == states.email">
       <div class="form-fields">
-        <p class="info">Please choose a password for your account. You may also register a passkey instead. Common passwords are insecure and thus not allowed.</p>
+        <p class="info">In order to easily recover your account in case of loss and to prevent spam, we need to your email address. An email will be sent to it to verify its authenticity.</p>
         <Input
-          type="password"
-          label="Your password"
-          placeholder="Your secure password..."
+          type="email"
+          label="Your email address"
+          placeholder="Your email address..."
         />
       </div>
     </template>
