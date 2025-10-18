@@ -1,15 +1,22 @@
 <script setup>
 import Input from "./Input.vue";
 import Button from "./Button.vue";
-import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { ref, watch } from "vue";
 
 const states = {
-  name: Symbol("name"),
-  password: Symbol("password"),
-  email: Symbol("email"),
+  name: "name",
+  password: "password",
+  email: "email",
 };
 
-const state = ref(states.name);
+const route = useRoute();
+const router = useRouter();
+const state = ref(route.query.state || states.name);
+
+watch(route, newRoute => {
+  state.value = newRoute.query.state || states.name;
+});
 
 function next() {
   switch (state.value) {
@@ -23,6 +30,10 @@ function next() {
       state.value = states.name;
       break;
   }
+
+  router.push({
+    query: { state: state.value },
+  });
 }
 </script>
 
