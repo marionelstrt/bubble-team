@@ -7,7 +7,7 @@ import BrownSugarBoba from "../assets/sugar.svg";
 import MatchaBoba from "../assets/matcha.svg";
 import { ChevronRightIcon } from "@heroicons/vue/24/solid";
 import { useRoute, useRouter } from "vue-router";
-import { ref, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import rockyou from "../assets/rockyou.txt?raw";
 
 const states = {
@@ -44,6 +44,13 @@ const name = defineModel("name");
 const lastName = defineModel("lastName");
 const password = defineModel("password");
 const email = defineModel("email");
+
+onMounted(() => {
+  name.value = route.query.name;
+  lastName.value = route.query.lastName;
+  password.value = route.query.password;
+  email.value = route.query.email;
+});
 
 function commonPassword() {
   const badpasswords = rockyou.split("\n");
@@ -101,7 +108,7 @@ function next() {
       break;
     case states.name:
       state.value = states.password;
-      query = { name: name.value, firstName: firstName.value };
+      query = { name: name.value, lastName: lastName.value };
       break;
     case states.password:
       state.value = states.email;
