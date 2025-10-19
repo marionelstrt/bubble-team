@@ -118,24 +118,24 @@ function next() {
       state.value = states.bubble;
       query = { email: email.value };
       break;
-    }
-    
-    fetch("http://localhost:8081/account/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        boba: selectedBoba.value,
-        name: name.value,
-        lastName: lastName.value,
-        password: password.value,
-        email: email.value,
-      }),
-    });
-    router.push({
-      query: { ...route.query, state: state.value, ...query },
-    });
+  }
+
+  fetch("http://localhost:8081/account/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      boba: selectedBoba.value,
+      name: name.value,
+      lastName: lastName.value,
+      password: password.value,
+      email: email.value,
+    }),
+  });
+  router.push({
+    query: { ...route.query, state: state.value, ...query },
+  });
 }
 </script>
 
