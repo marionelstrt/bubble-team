@@ -31,19 +31,21 @@ function handleResize() {
 
 function handleMouseMove(ev) {
   const mouse = { x: ev.clientX, y: ev.clientY };
-  const points = xCoords.value.flatMap(x => yCoords.value.map(y => ({ x, y })));
+  const points = xCoords.value.flatMap((x) =>
+    yCoords.value.map((y) => ({ x, y })),
+  );
 
   const maxDist = 80;
   const movementRatio = 0.3;
 
   points.forEach((point, i) => {
-    const dist = Math.hypot(point.x-mouse.x, point.y-mouse.y);
+    const dist = Math.hypot(point.x - mouse.x, point.y - mouse.y);
     if (dist < maxDist) {
-      const xDist = mouse.x-point.x;
-      const yDist = mouse.y-point.y;
+      const xDist = mouse.x - point.x;
+      const yDist = mouse.y - point.y;
 
       document.querySelectorAll(".background-icon")[i].style.transform =
-        `translateX(${xDist*movementRatio}px) translateY(${yDist*movementRatio}px) rotate(-20deg)`;
+        `translateX(${xDist * movementRatio}px) translateY(${yDist * movementRatio}px) rotate(-20deg)`;
     } else {
       document.querySelectorAll(".background-icon")[i].style.transform = "";
     }
