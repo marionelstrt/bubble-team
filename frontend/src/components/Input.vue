@@ -1,18 +1,24 @@
 <script setup>
-defineProps({
+const props = defineProps({
   label: String,
   placeholder: String,
+  error: String,
   type: {
     type: String,
     default: "text",
   },
 });
+
+const value = defineModel();
 </script>
 
 <template>
   <div class="input-field">
-    <label for="input">{{ label }}</label>
-    <input name="input" :type="type" :placeholder="placeholder" />
+    <label for="input" :data-error="error" :data-has-error="!!error">{{ label }}</label>
+    <input 
+      v-model="value"
+      name="input" :type="type"
+      :placeholder="placeholder" />
   </div>
 </template>
 
@@ -51,5 +57,14 @@ label {
   font-weight: 800;
   align-self: flex-start;
   color: white;
+}
+
+label[data-has-error="true"] {
+  color: var(--error-color);
+}
+
+label[data-has-error="true"]:after {
+  content: " — " attr(data-error);
+  font-size: var(--font-small);
 }
 </style>

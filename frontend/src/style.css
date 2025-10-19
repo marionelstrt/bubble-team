@@ -23,6 +23,8 @@
   --input-text-color: rgba(0, 0, 0, 0.8);
   --input-border-radius: 50px;
 
+  --error-color: #f76060;
+
   --font-small: 1.5rem;
   --font-medium: 2.5rem;
   --font-big: 3rem;
