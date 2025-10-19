@@ -14,11 +14,15 @@ const value = defineModel();
 
 <template>
   <div class="input-field">
-    <label for="input" :data-error="error" :data-has-error="!!error">{{ label }}</label>
-    <input 
+    <label for="input" :data-error="error" :data-has-error="!!error">{{
+      label
+    }}</label>
+    <input
       v-model="value"
-      name="input" :type="type"
-      :placeholder="placeholder" />
+      name="input"
+      :type="type"
+      :placeholder="placeholder"
+    />
   </div>
 </template>
 

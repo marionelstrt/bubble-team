@@ -8,10 +8,10 @@ import MatchaBoba from "../assets/matcha.svg";
 import { ChevronRightIcon } from "@heroicons/vue/24/solid";
 import { useRoute, useRouter } from "vue-router";
 import { ref, watch } from "vue";
-import rockyou from "../assets/rockyou.txt?raw"; 
+import rockyou from "../assets/rockyou.txt?raw";
 
 const states = {
-  bubble: "bubble", 
+  bubble: "bubble",
   name: "name",
   password: "password",
   email: "email",
@@ -22,8 +22,7 @@ const route = useRoute();
 const router = useRouter();
 const state = ref(route.query.state || defaultState);
 
-
-watch(route, newRoute => {
+watch(route, (newRoute) => {
   state.value = newRoute.query.state || defaultState;
 });
 
@@ -33,7 +32,7 @@ const bobas = [
   { name: "taro", desc: "claquage régulier", icon: TaroBoba },
   { name: "sugar", desc: "mariage", icon: BrownSugarBoba },
 ];
-const selectedBoba = ref(route.query.boba || null); 
+const selectedBoba = ref(route.query.boba || null);
 
 function handleBobaClick(boba) {
   selectedBoba.value = boba;
@@ -43,8 +42,8 @@ const errors = ref({});
 
 const name = defineModel("name");
 const lastName = defineModel("lastName");
-const password = defineModel('password')
-const email = defineModel('email'); 
+const password = defineModel("password");
+const email = defineModel("email");
 
 function commonPassword() {
   const badpasswords = rockyou.split("\n");
@@ -57,7 +56,7 @@ function badPasswordLength() {
 
 function validEmail() {
   return email.value.match(
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   );
 }
 
@@ -66,27 +65,23 @@ function checkErrors() {
 
   switch (state.value) {
     case states.name:
-      if (!name.value?.trim())
-        errors.value.name = "This must be filled.";
+      if (!name.value?.trim()) errors.value.name = "This must be filled.";
       if (!lastName.value?.trim())
         errors.value.lastName = "This must be filled.";
       break;
     case states.password:
       if (!password.value?.trim()) {
         errors.value.password = "This must be filled.";
-      }
-      else if (commonPassword()) {
+      } else if (commonPassword()) {
         errors.value.password = "This password is too common.";
-      }
-      else if (badPasswordLength()) {
+      } else if (badPasswordLength()) {
         errors.value.password = "This must be at least 6 characters.";
       }
-      break; 
+      break;
     case states.email:
       if (!email.value?.trim()) {
-        errors.value.email = "This must be filled."; 
-      }
-      else if (!validEmail()) {
+        errors.value.email = "This must be filled.";
+      } else if (!validEmail()) {
         errors.value.email = "This email is invalid";
       }
       break;
@@ -127,59 +122,82 @@ function next() {
 <template>
   <transition name="fade" mode="out-in">
     <template v-if="state == states.bubble">
-      <div class="form-fields"> 
+      <div class="form-fields">
         <div class="image-grid">
           <template v-for="boba in bobas">
-            <div @click="handleBobaClick(boba.name)" :class="['boba-tile', selectedBoba == boba.name ? 'boba-tile-selected' : null]">
-              <img :src="boba.icon" :alt="'Boba '+boba.name" />
-              <p class="boba-label">{{boba.name}}</p>
-              <p class="boba-desc">{{boba.desc}}</p>
+            <div
+              @click="handleBobaClick(boba.name)"
+              :class="[
+                'boba-tile',
+                selectedBoba == boba.name ? 'boba-tile-selected' : null,
+              ]"
+            >
+              <img :src="boba.icon" :alt="'Boba ' + boba.name" />
+              <p class="boba-label">{{ boba.name }}</p>
+              <p class="boba-desc">{{ boba.desc }}</p>
             </div>
           </template>
         </div>
       </div>
     </template>
-  
+
     <template v-else-if="state == states.name">
       <div class="form-fields">
         <Input
           v-model="name"
           label="Your name"
           placeholder="Your first name..."
-          :error="errors.name" />
+          :error="errors.name"
+        />
         <Input
           v-model="lastName"
           label="Your last name"
           placeholder="Your last name..."
-          :error="errors.lastName" />
+          :error="errors.lastName"
+        />
       </div>
     </template>
 
     <template v-else-if="state == states.password">
       <div class="form-fields">
-        <p class="info">Please choose a password for your account. You may also register a passkey instead. Common passwords are insecure and thus not allowed.</p>
+        <p class="info">
+          Please choose a password for your account. You may also register a
+          passkey instead. Common passwords are insecure and thus not allowed.
+        </p>
         <Input
           v-model="password"
           type="password"
           label="Your password"
           placeholder="Your secure password..."
-          :error="errors.password" />
+          :error="errors.password"
+        />
       </div>
     </template>
 
     <template v-else-if="state == states.email">
       <div class="form-fields">
-        <p class="info">In order to easily recover your account in case of loss and to prevent spam, we need to your email address. An email will be sent to it to verify its authenticity.</p>
+        <p class="info">
+          In order to easily recover your account in case of loss and to prevent
+          spam, we need to your email address. An email will be sent to it to
+          verify its authenticity.
+        </p>
         <Input
           v-model="email"
           type="email"
           label="Your email address"
           placeholder="Your email address..."
-          :error="errors.email"/>
+          :error="errors.email"
+        />
       </div>
     </template>
   </transition>
-  <Button :rows="3" :cols="12" width="200px" :disabled="state == states.bubble && selectedBoba == null" @click="next">
+  <Button
+    :rows="3"
+    :cols="12"
+    width="200px"
+    :disabled="state == states.bubble && selectedBoba == null"
+    @click="next"
+  >
     Next
     <template #icon>
       <ChevronRightIcon />
@@ -211,7 +229,9 @@ function next() {
   height: 180px;
   aspect-ratio: 1/1;
   display: flex;
-  transition: border-color 0.2s ease-in, transform 0.1s ease-in-out;
+  transition:
+    border-color 0.2s ease-in,
+    transform 0.1s ease-in-out;
   border: 3px solid transparent;
   user-select: none;
 }

@@ -10,7 +10,10 @@ defineProps({
 </script>
 
 <template>
-  <div :class="['button', disabled ? 'button-disabled' : null]" :style="{ width: width }">
+  <div
+    :class="['button', disabled ? 'button-disabled' : null]"
+    :style="{ width: width }"
+  >
     <div class="bubbles">
       <template v-for="n in rows" :key="n">
         <div class="bubble-row" :data-n="n">
@@ -22,8 +25,7 @@ defineProps({
                 </div>
               </template>
               <template v-else>
-                <div class="is-bubble">
-                </div>
+                <div class="is-bubble"></div>
               </template>
             </div>
           </template>
