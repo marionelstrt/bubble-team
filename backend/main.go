@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"fmt"
 )
 
 func main() {
@@ -22,8 +23,24 @@ func main() {
 	})
 
 	r.POST("/account/create", func(c *gin.Context) {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Sorry, didn't implement that yet."})
+		var json struct {
+			Boba string `json:"boba" binding:"required"`
+			Name string `json:"name" binding:"required"`	
+			LastName string `json:"lastName" binding:"required"`
+			Password string `json:"password" binding:"required"`
+			Email string `json:"email" binding:"required"`
+		}
+
+		if c.Bind(&json) == nil {
+			c.JSON(http.StatusOK, gin.H{"status": "ok"})
+			fmt.Println("boba", json.Boba) 
+			fmt.Println("name", json.Name)
+			fmt.Println("lastName", json.LastName) 
+			fmt.Println("password", json.Password) 
+			fmt.Println("email", json.Email)
+		}
 	})
+
 
 	r.Run(":8081")
 }
