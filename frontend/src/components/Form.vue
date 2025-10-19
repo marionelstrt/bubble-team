@@ -252,6 +252,7 @@ function next() {
   transition:
     border-color 0.2s ease-in,
     transform 0.1s ease-in-out;
+  justify-content: center;
   border: 3px solid transparent;
   user-select: none;
 }
@@ -272,6 +273,7 @@ function next() {
   position: absolute;
   width: 20px;
   height: 20px;
+  left: 0;
   background-color: var(--mauve-5);
   content: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke-width%3D%221.5%22%20stroke%3D%22white%22%20class%3D%22size-6%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m4.5%2012.75%206%206%209-13.5%22%20%2F%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m4.5%2012.75%206%206%209-13.5%22%20%2F%3E%3C%2Fsvg%3E");
   border-radius: 50%;
@@ -302,7 +304,6 @@ function next() {
 
 .boba-desc {
   position: absolute;
-  justify-self: anchor-center;
   align-self: flex-end;
   color: #00000080;
   font-weight: 400;
