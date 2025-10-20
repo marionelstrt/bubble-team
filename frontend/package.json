@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/sour-gummy": "^5.2.8",
     "@heroicons/vue": "^2.2.0",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
