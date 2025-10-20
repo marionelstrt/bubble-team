@@ -28,6 +28,10 @@ main {
   overflow: hidden;
   border: 5px dashed var(--mauve-5);
   background-color: var(--mauve-2);
+
+  @media (max-width: 600px) {
+    width: 100vw;
+  }
 }
 
 .title {
@@ -35,6 +39,10 @@ main {
   gap: 3em;
   align-items: center;
   flex-direction: row;
+
+  @media (max-width: 600px) {
+    gap: 2em;
+  }
 }
 
 .title img {

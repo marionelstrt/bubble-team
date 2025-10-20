@@ -32,7 +32,9 @@ const value = defineModel();
   transition: all 0.1s ease-in-out;
   display: flex;
   flex-direction: column;
+  align-self: center;
   display: flex;
+  width: 100%;
 }
 
 .input-field:active {
@@ -59,6 +61,7 @@ input:focus {
 label {
   font-size: 2em;
   font-weight: 800;
+  line-height: 20px;
   align-self: flex-start;
   color: white;
 }

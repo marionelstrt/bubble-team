@@ -58,7 +58,7 @@ function commonPassword() {
 }
 
 function badPasswordLength() {
-  return password.value?.length <= 6;
+  return password.value?.length < 6;
 }
 
 function validEmail() {
@@ -230,8 +230,14 @@ function next() {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   height: 400px;
+  width: 100%;
   gap: 1em;
+
+  @media (max-width: 600px) {
+    width: 90%;
+  }
 }
 
 .image-grid {
@@ -239,8 +245,12 @@ function next() {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 30px;
-  width: 100%;
   height: 100%;
+
+  @media (max-width: 600px) {
+    /* ez responsive */
+    transform: scale(0.8);
+  }
 }
 
 .boba-tile {
