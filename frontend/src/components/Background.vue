@@ -10,7 +10,9 @@ const spacing = 60;
 const xCoords = computed(() =>
   Array.from(
     {
-      length: windowWidth.value-32 /* .background-icon width, so we don't overflow */,
+      length:
+        windowWidth.value -
+        32 /* .background-icon width, so we don't overflow */,
     },
     (_, i) => i,
   ).filter((n) => n % spacing === start),
@@ -18,7 +20,9 @@ const xCoords = computed(() =>
 const yCoords = computed(() =>
   Array.from(
     {
-      length: windowHeight.value-32 /* .background-icon width, so we don't overflow */,
+      length:
+        windowHeight.value -
+        32 /* .background-icon width, so we don't overflow */,
     },
     (_, i) => i,
   ).filter((n) => n % spacing === start),
