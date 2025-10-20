@@ -163,6 +163,9 @@ function next() {
 
     <template v-else-if="state == states.name">
       <div class="form-fields">
+        <p class="info">
+          We need to know who you are! This information will be visible on your profile publicly.
+        </p>
         <Input
           v-model="name"
           label="Your name"
@@ -322,6 +325,7 @@ function next() {
 }
 
 .info {
+  margin-top: 0;
   text-wrap: wrap;
   color: white;
   max-width: 100%;
