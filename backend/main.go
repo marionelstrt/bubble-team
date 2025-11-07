@@ -1,13 +1,24 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
-	"fmt"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
 	r := gin.Default()
+
+	db, err := sqlx.Connect("sqlite3", "db.sqlite3")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	CreateTable(db)
+	db.MustExec(schema)
 
 	// temporary, before we have a reverse proxy, just to be able to contact the backend from the frontend
 	// TODO: use caddy so that backend and frontend are on the same origin, and remove that
@@ -22,25 +33,23 @@ func main() {
 		c.Next()
 	})
 
+	_ = db.MustBegin()
+
 	r.POST("/account/create", func(c *gin.Context) {
-		var json struct {
-			Boba string `json:"boba" binding:"required"`
-			Name string `json:"name" binding:"required"`	
-			LastName string `json:"lastName" binding:"required"`
-			Password string `json:"password" binding:"required"`
-			Email string `json:"email" binding:"required"`
+		var user User
+
+		if err := c.BindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 		}
 
-		if c.Bind(&json) == nil {
-			c.JSON(http.StatusOK, gin.H{"status": "ok"})
-			fmt.Println("boba", json.Boba) 
-			fmt.Println("name", json.Name)
-			fmt.Println("lastName", json.LastName) 
-			fmt.Println("password", json.Password) 
-			fmt.Println("email", json.Email)
+		_, err = user.Save(db)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "error"})
+		} else {
+			c.JSON(http.StatusCreated, gin.H{"status": "created"})
 		}
 	})
 
-
-	r.Run(":8081")
+	_ = r.Run(":8081")
 }
