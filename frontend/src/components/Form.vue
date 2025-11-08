@@ -23,10 +23,27 @@ const defaultState = states.bubble;
 
 const route = useRoute();
 const router = useRouter();
-const state = ref(route.query.state || defaultState);
+
+let query = {};
+function updateParams() {
+  query.state = state.value;
+  router.push({
+    hash: "#" + btoa(JSON.stringify(query)),
+  });
+}
+function decodeParams(from = route) {
+  try {
+    query = JSON.parse(atob(from.hash.substr(1)));
+  } catch {
+  }
+}
+decodeParams();
+
+const state = ref(query.state || defaultState);
 
 watch(route, (newRoute) => {
-  state.value = newRoute.query.state || defaultState;
+  decodeParams(newRoute);
+  state.value = query.state || defaultState;
 });
 
 const bobas = [
@@ -35,7 +52,7 @@ const bobas = [
   { name: "taro", desc: "claquage régulier", icon: TaroBoba },
   { name: "sugar", desc: "mariage", icon: BrownSugarBoba },
 ];
-const selectedBoba = ref(route.query.boba || null);
+const selectedBoba = ref(query.boba || null);
 
 function handleBobaClick(boba) {
   selectedBoba.value = boba;
@@ -50,10 +67,10 @@ const email = defineModel("email");
 const code = defineModel("code");
 
 onMounted(() => {
-  name.value = route.query.name;
-  lastName.value = route.query.lastName;
-  password.value = route.query.password;
-  email.value = route.query.email;
+  name.value = query.name;
+  lastName.value = query.lastName;
+  password.value = query.password;
+  email.value = query.email;
 });
 
 async function createAccount() {
@@ -79,9 +96,9 @@ async function createAccount() {
 
   if (res.status == 201) {
     state.value = states.confirm;
-    router.push({
-      query: { state: state.value },
-    });
+    // remove earlier params which are now stored on the server-side
+    query = { state: state.value };
+    updateParams();
   } else {
     // handle error?
   }
@@ -134,31 +151,28 @@ function checkErrors() {
 function next() {
   if (checkErrors() || selectedBoba.value == null) return;
 
-  let query = {};
-
   switch (state.value) {
     case states.bubble:
       state.value = states.name;
-      query = { boba: selectedBoba.value };
+      query.boba = selectedBoba.value;
       break;
     case states.name:
       state.value = states.password;
-      query = { name: name.value, lastName: lastName.value };
+      query.name = name.value
+      query.lastName = lastName.value;
       break;
     case states.password:
       state.value = states.email;
-      query = { password: password.value };
+      query.password = password.value;
       break;
     case states.email:
       state.value = states.loading;
-      query = { email: email.value };
+      query.email = email.value;
       createAccount();
       return;
   }
 
-  router.push({
-    query: { ...route.query, state: state.value, ...query },
-  });
+  updateParams();
 }
 </script>
 
