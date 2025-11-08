@@ -4,89 +4,104 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 
 const windowWidth = ref(window.innerWidth);
 const windowHeight = ref(window.innerHeight);
+const mouse = ref({ x: 0, y: 0 });
 
-const start = 15;
-const spacing = 60;
-const xCoords = computed(() =>
-  Array.from(
-    {
-      length:
-        windowWidth.value -
-        32 /* .background-icon width, so we don't overflow */,
-    },
-    (_, i) => i,
-  ).filter((n) => n % spacing === start),
-);
-const yCoords = computed(() =>
-  Array.from(
-    {
-      length:
-        windowHeight.value -
-        32 /* .background-icon width, so we don't overflow */,
-    },
-    (_, i) => i,
-  ).filter((n) => n % spacing === start),
-);
+const points = ref([]);
+const spacing = 50;
+
+function initializePoints() {
+  points.value = [];
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  for (let y = 0; y < height-32 /* icon width, so we don't overflow */; y += spacing) {
+    for (let x = 0; x < width-32; x += spacing) {
+      points.value.push({
+        ox: x,
+        oy: y,
+        x: x,
+        y: y,
+        vx: 0,
+        vy: 0,
+        shape: Math.random() > 0.5 ? "heart" : "circle",
+      });
+    }
+  }
+}
 
 function handleResize() {
   windowWidth.value = window.innerWidth;
   windowHeight.value = window.innerHeight;
+  initializePoints();
 }
 
-function handleMouseMove(ev) {
-  const mouse = { x: ev.clientX, y: ev.clientY };
-  const points = xCoords.value.flatMap((x) =>
-    yCoords.value.map((y) => ({ x, y })),
-  );
+function handleMouseMove(e) {
+  mouse.value.x = e.clientX;
+  mouse.value.y = e.clientY;
+}
 
-  const maxDist = 80;
-  const movementRatio = 0.3;
+let animationFrameId = null;
+function animate() {
+  for (const p of points.value) {
+    const dx = mouse.value.x - p.x;
+    const dy = mouse.value.y - p.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const force = Math.max(100 - dist, 0) / 250; // attraction strength
+    const angle = Math.atan2(dy, dx);
 
-  points.forEach((point, i) => {
-    const dist = Math.hypot(point.x - mouse.x, point.y - mouse.y);
-    if (dist < maxDist) {
-      const xDist = mouse.x - point.x;
-      const yDist = mouse.y - point.y;
+    // mouse attraction
+    p.vx += Math.cos(angle) * force * 0.5;
+    p.vy += Math.sin(angle) * force * 0.5;
 
-      document.querySelectorAll(".background-icon")[i].style.transform =
-        `translateX(${xDist * movementRatio}px) translateY(${yDist * movementRatio}px) rotate(-20deg)`;
-    } else {
-      document.querySelectorAll(".background-icon")[i].style.transform = "";
-    }
-  });
+    // elastic pull back to origin
+    p.vx += (p.ox - p.x) * 0.02;
+    p.vy += (p.oy - p.y) * 0.02;
+
+    // damping
+    p.vx *= 0.9;
+    p.vy *= 0.9;
+
+    p.x += p.vx;
+    p.y += p.vy;
+  }
+  animationFrameId = requestAnimationFrame(animate);
 }
 
 onMounted(() => {
+  initializePoints();
   window.addEventListener("resize", handleResize);
   window.addEventListener("mousemove", handleMouseMove);
+  animate();
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
   window.removeEventListener("mousemove", handleMouseMove);
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
 });
 </script>
 
 <template>
   <div class="background">
-    <template v-for="x in xCoords" :key="x">
-      <template v-for="y in yCoords" :key="y">
-        <div
-          class="background-icon"
-          :style="{
-            marginLeft: x + 'px',
-            marginTop: y + 'px',
-          }"
-        >
-          <template v-if="Math.random() > 0.5">
-            <HeartIcon />
-          </template>
-          <template v-else>
-            <div class="circle" />
-          </template>
-        </div>
+    <div
+      v-for="(p, index) in points"
+      :key="index"
+      class="background-icon"
+      :style="{
+        transform: `translateX(${p.x - p.ox}px) translateY(${p.y - p.oy}px) rotate(-20deg)`,
+        left: p.ox + 'px',
+        top: p.oy + 'px',
+      }"
+    >
+      <template v-if="p.shape === 'heart'">
+        <HeartIcon />
       </template>
-    </template>
+      <template v-else>
+        <div class="circle" />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -96,6 +111,9 @@ onBeforeUnmount(() => {
   left: 0;
   z-index: -1;
   position: absolute;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .background-icon {
@@ -103,8 +121,7 @@ onBeforeUnmount(() => {
   width: 32px;
   height: 32px;
   position: absolute;
-  transform: rotate(-20deg);
-  transition: transform 0.2s linear;
+  transition: none;
 }
 
 .circle {
