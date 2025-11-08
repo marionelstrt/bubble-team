@@ -1,5 +1,4 @@
----
-name: Run prettier on Marion's code
+name: Format Marion's code
 
 on:
   push:
@@ -8,11 +7,42 @@ permissions:
   contents: write
 
 jobs:
-  prettier-fix:
+  format:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - name: Invoke the Prettier fix
-        uses: WorkOfStan/prettier-fix@main
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          commit-changes: true
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and run Prettier
+        run: |
+          npx -y prettier --write "./frontend/**/*.{js,jsx,ts,tsx,vue,html,css,md,json,yaml,yml}"
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install and run gofumpt
+        run: |
+          go install mvdan.cc/gofumpt@latest
+          $(go env GOPATH)/bin/gofumpt -w .
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'torvalds'
+          git config --global user.email 'torvalds@users.noreply.github.com'
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "Format Marion's code"
+            git push
+          else
+            echo "No changes to commit"
+          fi
