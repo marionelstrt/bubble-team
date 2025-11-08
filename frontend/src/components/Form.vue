@@ -246,9 +246,7 @@ function next() {
 
     <template v-else-if="state == states.confirm">
       <div class="form-fields">
-        <p class="info">
-          Please input the 6-digits code sent to you by email.
-        </p>
+        <p class="info">Please input the 6-digits code sent to you by email.</p>
         <Input
           v-model="code"
           label="Your code"
@@ -263,7 +261,10 @@ function next() {
     :rows="3"
     :cols="12"
     width="200px"
-    :disabled="(state == states.bubble && selectedBoba == null) || state == states.loading"
+    :disabled="
+      (state == states.bubble && selectedBoba == null) ||
+      state == states.loading
+    "
     @click="next"
   >
     Next

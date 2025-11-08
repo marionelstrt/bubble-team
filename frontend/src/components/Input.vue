@@ -16,12 +16,7 @@ const value = defineModel();
     <label for="input" :data-error="error" :data-has-error="!!error">{{
       label
     }}</label>
-    <input
-      v-model="value"
-      name="input"
-      :type="type"
-      v-bind="$attrs"
-    />
+    <input v-model="value" name="input" :type="type" v-bind="$attrs" />
   </div>
 </template>
 
