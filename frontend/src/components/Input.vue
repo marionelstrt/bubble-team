@@ -73,5 +73,6 @@ label[data-has-error="true"] {
 label[data-has-error="true"]:after {
   content: " — " attr(data-error);
   font-size: var(--font-small);
+  line-height: 0px;
 }
 </style>

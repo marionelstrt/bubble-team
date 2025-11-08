@@ -29,6 +29,9 @@
   --font-huge: 5rem;
 
   @media (max-width: 600px) {
+    --font-small: 1rem;
+    --font-medium: 1.5rem;
+    --font-big: 2rem;
     --font-huge: 4rem;
   }
 }

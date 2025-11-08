@@ -45,7 +45,7 @@ defineProps({
 
 <style scoped>
 button {
-  font-size: var(--font-medium);
+  font-size: 2.5rem; /* TODO: var(--font-big) makes the button look bad */
   background-color: var(--button-background);
   color: white;
   padding: 20px;

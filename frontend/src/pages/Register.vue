@@ -31,6 +31,7 @@ main {
 
   @media (max-width: 600px) {
     width: 100vw;
+    gap: 1.5em;
   }
 }
 

@@ -240,7 +240,7 @@ function next() {
   gap: 1em;
 
   @media (max-width: 600px) {
-    width: 90%;
+    width: 80%;
   }
 }
 
