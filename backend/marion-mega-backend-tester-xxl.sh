@@ -1,6 +1,6 @@
 #!/bin/sh
 
-API_URL=http://localhost:8081
+API_URL=http://localhost:8080/api
 
 case "$1" in
     create_user)

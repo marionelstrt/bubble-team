@@ -120,7 +120,7 @@ function next() {
       break;
   }
 
-  fetch("http://localhost:8081/account/create", {
+  fetch("/api/account/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

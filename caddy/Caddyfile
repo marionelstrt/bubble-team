@@ -1,0 +1,9 @@
+http://localhost:8080, https://localhost:8443 {
+	handle_path /api/* {
+		reverse_proxy http://backend:8080
+	}
+
+	handle {
+		reverse_proxy http://frontend:5173
+	}
+}
