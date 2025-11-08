@@ -13,7 +13,7 @@ h1 {
   background-image: var(--title);
   background-position: top left;
   background-size: 300% 100%;
-  transition: all 1s ease-in-out;
+  transition: background-position 1s ease-in-out;
   font-size: var(--font-huge);
   margin: 0;
 }
