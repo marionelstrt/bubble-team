@@ -14,8 +14,12 @@ function initializePoints() {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  for (let y = 0; y < height-32 /* icon width, so we don't overflow */; y += spacing) {
-    for (let x = 0; x < width-32; x += spacing) {
+  for (
+    let y = 0;
+    y < height - 32 /* icon width, so we don't overflow */;
+    y += spacing
+  ) {
+    for (let x = 0; x < width - 32; x += spacing) {
       points.value.push({
         ox: x,
         oy: y,
