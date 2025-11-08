@@ -21,10 +21,10 @@ function initializePoints() {
   ) {
     for (let x = 0; x < width - 32; x += spacing) {
       points.value.push({
-        ox: x,
-        oy: y,
-        x: x,
-        y: y,
+        ox: 15+x,
+        oy: 15+y,
+        x: 15+x,
+        y: 15+y,
         vx: 0,
         vy: 0,
         shape: Math.random() > 0.5 ? "heart" : "circle",
