@@ -1,24 +1,25 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/marionelstrt/bubble-team/models"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func main() {
-	r := gin.Default()
+func initDB() *sqlx.DB {
+	db := sqlx.MustConnect("sqlite3", "db.sqlite3")
+	models.CreateUserTable(db)
+	return db
+}
 
-	db, err := sqlx.Connect("sqlite3", "db.sqlite3")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	CreateTable(db)
-	db.MustExec(schema)
+func main() {
+	db := initDB()
+
+	r := gin.Default()
 
 	// temporary, before we have a reverse proxy, just to be able to contact the backend from the frontend
 	// TODO: use caddy so that backend and frontend are on the same origin, and remove that
@@ -33,21 +34,19 @@ func main() {
 		c.Next()
 	})
 
-	_ = db.MustBegin()
-
 	r.POST("/account/create", func(c *gin.Context) {
-		var user User
+		var user models.User
 
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		_, err = user.Save(db)
+		_, err := user.Save(db)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"status": "error"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		} else {
-			c.JSON(http.StatusCreated, gin.H{"status": "created"})
+			c.JSON(http.StatusCreated, gin.H{"message": "created"})
 		}
 	})
 

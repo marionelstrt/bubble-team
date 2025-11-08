@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"fmt"
@@ -8,12 +8,13 @@ import (
 )
 
 type User struct {
-	Boba              string `db:"boba" json:"boba" binding:"required"`
-	Name              string `db:"name" json:"name" binding:"required"`
-	LastName          string `db:"last_name" json:"lastName" binding:"required" `
-	Password          string `json:"password" binding:"required"`
-	Email             string `db:"email" json:"email" binding:"required"`
+	Boba     string `db:"boba" json:"boba" binding:"required"`
+	Name     string `db:"name" json:"name" binding:"required"`
+	LastName string `db:"last_name" json:"lastName" binding:"required"`
+	Email    string `db:"email" json:"email" binding:"required"`
+
 	EncryptedPassword string `json:"-" db:"encrypted_password"`
+	Password          string `json:"password" binding:"required"`
 }
 
 const schema = `
@@ -27,8 +28,7 @@ const schema = `
 	)
 `
 
-// creates the users table inside the database
-func CreateTable(db *sqlx.DB) {
+func CreateUserTable(db *sqlx.DB) {
 	db.MustExec(schema)
 }
 
@@ -42,12 +42,6 @@ func FindUserByID(db *sqlx.DB, id int) *User {
 	return &user
 }
 
-func Encrypt(password []byte) string {
-	s, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
-	s1 := string(s)
-	return s1
-}
-
 // saves a user in the database from a bound User
 func (u *User) Save(db *sqlx.DB) (*User, error) {
 	s, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
@@ -55,6 +49,7 @@ func (u *User) Save(db *sqlx.DB) (*User, error) {
 		return nil, fmt.Errorf("failed to encrypt password: %w", err)
 	}
 	u.EncryptedPassword = string(s)
+
 	query := `
 		INSERT INTO USERS (boba, name, last_name, encrypted_password, email) 
 		VALUES (:boba, :name, :last_name, :encrypted_password, :email)
@@ -66,7 +61,7 @@ func (u *User) Save(db *sqlx.DB) (*User, error) {
 	return u, err
 }
 
-func (u *User) PrettyPrint() string {
+func (u *User) String() string {
 	return fmt.Sprintf("User(Boba: %s, Name: %s, LastName: %s, Password: %s, Email: %s)",
 		u.Boba, u.Name, u.LastName, u.Password, u.Email)
 }
