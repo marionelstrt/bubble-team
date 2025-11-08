@@ -23,6 +23,8 @@
 
   --error-color: #f76060;
 
+  --loader-color: var(--mauve-5);
+
   --font-small: 1.5rem;
   --font-medium: 2.5rem;
   --font-big: 3rem;

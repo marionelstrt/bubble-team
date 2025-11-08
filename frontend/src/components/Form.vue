@@ -1,6 +1,7 @@
 <script setup>
 import Input from "./Input.vue";
 import Button from "./Button.vue";
+import Loader from "./Loader.vue";
 import MonsterBoba from "../assets/monster.svg";
 import TaroBoba from "../assets/boba.svg";
 import BrownSugarBoba from "../assets/sugar.svg";
@@ -15,6 +16,8 @@ const states = {
   name: "name",
   password: "password",
   email: "email",
+  loading: "loading",
+  confirm: "confirm",
 };
 const defaultState = states.bubble;
 
@@ -44,6 +47,7 @@ const name = defineModel("name");
 const lastName = defineModel("lastName");
 const password = defineModel("password");
 const email = defineModel("email");
+const code = defineModel("code");
 
 onMounted(() => {
   name.value = route.query.name;
@@ -51,6 +55,37 @@ onMounted(() => {
   password.value = route.query.password;
   email.value = route.query.email;
 });
+
+async function createAccount() {
+  const res = await fetch("/api/account/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      boba: selectedBoba.value,
+      name: name.value,
+      lastName: lastName.value,
+      password: password.value,
+      email: email.value,
+    }),
+  });
+
+  // TODO: maybe remove?
+  // just some time to be able to see the loader
+  await new Promise((resolve) => {
+    setTimeout(() => resolve(), 1000);
+  });
+
+  if (res.status == 201) {
+    state.value = states.confirm;
+    router.push({
+      query: { state: state.value },
+    });
+  } else {
+    // handle error?
+  }
+}
 
 function commonPassword() {
   const badpasswords = rockyou.split("\n");
@@ -115,24 +150,12 @@ function next() {
       query = { password: password.value };
       break;
     case states.email:
-      state.value = states.bubble;
+      state.value = states.loading;
       query = { email: email.value };
-      break;
+      createAccount();
+      return;
   }
 
-  fetch("/api/account/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      boba: selectedBoba.value,
-      name: name.value,
-      lastName: lastName.value,
-      password: password.value,
-      email: email.value,
-    }),
-  });
   router.push({
     query: { ...route.query, state: state.value, ...query },
   });
@@ -214,12 +237,33 @@ function next() {
         />
       </div>
     </template>
+
+    <template v-else-if="state == states.loading">
+      <div class="form-fields">
+        <Loader />
+      </div>
+    </template>
+
+    <template v-else-if="state == states.confirm">
+      <div class="form-fields">
+        <p class="info">
+          Please input the 6-digits code sent to you by email.
+        </p>
+        <Input
+          v-model="code"
+          label="Your code"
+          placeholder="Your 6-digits code..."
+          maxLength="6"
+          :error="errors.code"
+        />
+      </div>
+    </template>
   </transition>
   <Button
     :rows="3"
     :cols="12"
     width="200px"
-    :disabled="state == states.bubble && selectedBoba == null"
+    :disabled="(state == states.bubble && selectedBoba == null) || state == states.loading"
     @click="next"
   >
     Next
@@ -336,7 +380,7 @@ function next() {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 .fade-leave-to {

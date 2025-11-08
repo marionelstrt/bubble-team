@@ -1,7 +1,6 @@
 <script setup>
 const props = defineProps({
   label: String,
-  placeholder: String,
   error: String,
   type: {
     type: String,
@@ -21,7 +20,7 @@ const value = defineModel();
       v-model="value"
       name="input"
       :type="type"
-      :placeholder="placeholder"
+      v-bind="$attrs"
     />
   </div>
 </template>
