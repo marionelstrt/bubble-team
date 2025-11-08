@@ -34,8 +34,7 @@ function updateParams() {
 function decodeParams(from = route) {
   try {
     query = JSON.parse(atob(from.hash.substr(1)));
-  } catch {
-  }
+  } catch {}
 }
 decodeParams();
 
@@ -158,7 +157,7 @@ function next() {
       break;
     case states.name:
       state.value = states.password;
-      query.name = name.value
+      query.name = name.value;
       query.lastName = lastName.value;
       break;
     case states.password:
