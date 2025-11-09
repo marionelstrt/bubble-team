@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,16 +13,26 @@ func registerRoutes(r *gin.Engine, db *sqlx.DB) {
 	r.POST("/account/create", func(c *gin.Context) {
 		var user models.User
 
-		if err := c.BindJSON(&user); err != nil {
+		err := c.BindJSON(&user)
+		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		_, err := user.Save(db)
+		err = user.Create(db)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		} else {
-			c.JSON(http.StatusCreated, gin.H{"message": "created"})
+			return
 		}
+
+		err = SendVerificationEmail(user)
+		if err != nil {
+			fmt.Println("Failed to send verification email:", err)
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": "created"})
+	})
+
+	r.POST("/account/verify", func(c *gin.Context) {
 	})
 }

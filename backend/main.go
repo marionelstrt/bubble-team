@@ -9,6 +9,8 @@ import (
 )
 
 func initDB() *sqlx.DB {
+	// TODO: switch to postgres someday?
+	// TODO: if not, make this a volume?
 	db := sqlx.MustConnect("sqlite3", "db.sqlite3")
 	models.CreateUserTable(db)
 	return db

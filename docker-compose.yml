@@ -13,12 +13,21 @@ services:
     build: backend/
     volumes:
       - ./backend:/app
+    environment:
+      SMTP_HOST: smtp4dev
+      SMTP_PORT: 25
+      SMTP_USER: chayanne@bubble.com
+      SMTP_PASS: doesntmatter
 
   frontend:
     build: frontend/
     volumes:
       - ./frontend:/app
       - node_modules:/app/node_modules
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: unless-stopped
 
 volumes:
   caddy_data:
