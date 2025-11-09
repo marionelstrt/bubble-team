@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-
 	"math/rand/v2"
 
 	"github.com/jmoiron/sqlx"
