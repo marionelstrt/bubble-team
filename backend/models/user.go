@@ -11,10 +11,10 @@ import (
 type User struct {
 	ID int64 `json:"-" db:"id"`
 
-	Boba     string `db:"boba" json:"boba" binding:"required"`
+	Boba     string `db:"boba" json:"boba" binding:"required,oneof=taro matcha monster sugar"`
 	Name     string `db:"name" json:"name" binding:"required"`
 	LastName string `db:"last_name" json:"lastName" binding:"required"`
-	Email    string `db:"email" json:"email" binding:"required"`
+	Email    string `db:"email" json:"email" binding:"required,email"`
 
 	EncryptedPassword string `json:"-" db:"encrypted_password"`
 	Password          string `json:"password" binding:"required"`
@@ -78,6 +78,7 @@ func (u *User) Create(db *sqlx.DB) error {
 	if err != nil {
 		return fmt.Errorf("failed to insert into users: %w", err)
 	}
+	defer rows.Close()
 	rows.Next()
 	err = rows.Scan(&id)
 	if err != nil {
