@@ -8,6 +8,7 @@ const mouse = ref({ x: 0, y: 0 });
 
 const points = ref([]);
 const spacing = 50;
+const margin = 15;
 
 function initializePoints() {
   points.value = [];
@@ -21,10 +22,10 @@ function initializePoints() {
   ) {
     for (let x = 0; x < width - 32; x += spacing) {
       points.value.push({
-        ox: 15 + x,
-        oy: 15 + y,
-        x: 15 + x,
-        y: 15 + y,
+        ox: margin + x,
+        oy: margin + y,
+        x: margin + x,
+        y: margin + y,
         vx: 0,
         vy: 0,
         shape: Math.random() > 0.5 ? "heart" : "circle",
