@@ -86,7 +86,6 @@ async function createAccount() {
       email: email.value,
     }),
   });
-
   // TODO: maybe remove?
   // just some time to be able to see the loader
   await new Promise((resolve) => {
@@ -101,6 +100,23 @@ async function createAccount() {
   } else {
     // handle error?
   }
+}
+
+
+async function verifyAccount() {
+  const res = await fetch("/api/account/verify", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      boba: selectedBoba.value,
+      name: name.value,
+      lastName: lastName.value,
+      password: password.value,
+      email: email.value,
+    }),
+  });
 }
 
 function commonPassword() {
@@ -168,6 +184,7 @@ function next() {
       state.value = states.loading;
       query.email = email.value;
       createAccount();
+      verifyAccount();
       return;
   }
 

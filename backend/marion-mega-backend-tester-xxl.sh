@@ -8,8 +8,14 @@ case "$1" in
             "boba": "taro",
             "lastName":"mrn",
             "password":"chat",
-            "email":"m",
+            "email":"mariontarento@gmail.com",
             "name":"chat"
+        }' | jq
+        ;;
+    verify_user)
+        curl -s $API_URL/account/verify -d '{
+            "email":"m",
+            "code":"'$2'"
         }' | jq
         ;;
     *)
