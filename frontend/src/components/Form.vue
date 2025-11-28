@@ -102,7 +102,6 @@ async function createAccount() {
   }
 }
 
-
 async function verifyAccount() {
   const res = await fetch("/api/account/verify", {
     method: "POST",

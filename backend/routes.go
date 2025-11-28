@@ -70,7 +70,6 @@ func registerRoutes(r *gin.Engine, db *sqlx.DB) {
 	})
 
 	r.POST("/account/verify", AuthentificationRequired(), func(c *gin.Context) {
-
 	})
 }
 
