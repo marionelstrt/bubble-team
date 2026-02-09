@@ -18,6 +18,7 @@ const states = {
   email: "email",
   loading: "loading",
   confirm: "confirm",
+  success: "success",
 };
 const defaultState = states.bubble;
 
@@ -78,6 +79,7 @@ async function createAccount() {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({
       boba: selectedBoba.value,
       name: name.value,
@@ -103,19 +105,38 @@ async function createAccount() {
 }
 
 async function verifyAccount() {
-  const res = await fetch("/api/account/verify", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      boba: selectedBoba.value,
-      name: name.value,
-      lastName: lastName.value,
-      password: password.value,
-      email: email.value,
-    }),
-  });
+  const numericCode = Number(code.value);
+  try {
+    const res = await fetch("/api/verify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        code: numericCode,
+      }),
+    });
+
+    if (!res.ok) {
+      const payload = await res.json().catch(() => ({}));
+      errors.value.code = payload.error || "Invalid verification code.";
+      state.value = states.confirm;
+      query.state = state.value;
+      updateParams();
+      return;
+    }
+
+    code.value = "";
+    state.value = states.success;
+    query = { state: state.value };
+    updateParams();
+  } catch (err) {
+    errors.value.code = "Unable to verify now. Please retry.";
+    state.value = states.confirm;
+    query.state = state.value;
+    updateParams();
+  }
 }
 
 function commonPassword() {
@@ -158,6 +179,14 @@ function checkErrors() {
         errors.value.email = "This email is invalid";
       }
       break;
+    case states.confirm:
+      if (!code.value?.trim()) {
+        errors.value.code = "This must be filled.";
+      } else if (!/^[0-9]{6}$/.test(code.value.trim())) {
+        errors.value.code = "The code must be 6 digits.";
+      }
+      break;
+
   }
 
   return !!Object.keys(errors.value).length;
@@ -183,6 +212,11 @@ function next() {
       state.value = states.loading;
       query.email = email.value;
       createAccount();
+      break;
+    case states.confirm:
+      state.value = states.loading;
+      query.state = state.value;
+      updateParams();
       verifyAccount();
       return;
   }
@@ -285,6 +319,14 @@ function next() {
         />
       </div>
     </template>
+
+    <template v-else-if="state == states.success">
+      <div class="form-fields">
+        <p class="info">
+          Your account has been verified. You can now access Bubble!
+        </p>
+      </div>
+    </template>
   </transition>
   <Button
     :rows="3"
@@ -292,7 +334,8 @@ function next() {
     width="200px"
     :disabled="
       (state == states.bubble && selectedBoba == null) ||
-      state == states.loading
+      state == states.loading ||
+      state == states.success
     "
     @click="next"
   >

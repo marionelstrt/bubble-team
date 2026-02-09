@@ -40,6 +40,15 @@ func CreateUserTable(db *sqlx.DB) {
 	db.MustExec(schema)
 }
 
+func FindUserByEmail(db *sqlx.DB, email string) (*User, error) {
+	var user User
+	err := db.Get(&user, "SELECT * FROM users WHERE email = ?", email)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func FindUserByID(db *sqlx.DB, id int) *User {
 	var user User
 	row := db.QueryRow("SELECT * FROM users where id=?", id)
