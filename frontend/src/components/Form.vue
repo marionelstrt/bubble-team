@@ -186,7 +186,6 @@ function checkErrors() {
         errors.value.code = "The code must be 6 digits.";
       }
       break;
-
   }
 
   return !!Object.keys(errors.value).length;
