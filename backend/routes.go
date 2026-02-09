@@ -27,13 +27,26 @@ func createToken(mail string) (string, error) {
 func AuthentificationRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("user")
-		if err != nil {
+		if err != nil || cookie == "" {
 			log.Println("cookie not found")
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "cookie not found"})
 			return
 		}
-		log.Println("cookie found:", cookie)
-		// c.String(http.StatusOK, "value of the cookie is : %s", cookie)
+
+		token, err := jwt.Parse(cookie, func(t *jwt.Token) (interface{}, error) {
+
+			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method")
+			}
+			return secretKey, nil
+		})
+		if err != nil || !token.Valid {
+			log.Println("invalid token:", err)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+			return
+		}
+
+		log.Println("cookie valid")
 		c.Next()
 	}
 }
