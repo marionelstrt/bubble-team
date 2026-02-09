@@ -34,7 +34,6 @@ func AuthentificationRequired() gin.HandlerFunc {
 		}
 
 		token, err := jwt.Parse(cookie, func(t *jwt.Token) (interface{}, error) {
-
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method")
 			}
